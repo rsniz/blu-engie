@@ -1,0 +1,31 @@
+{
+  "name": "blu-engie",
+  "version": "0.1.0",
+  "description": "A handy Discord bot for server management.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsniz/blu-engie.git"
+  },
+  "keywords": [
+    "Discord",
+    "Bot"
+  ],
+  "author": "Rodrigo Saczuk Niz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rsniz/blu-engie/issues"
+  },
+  "homepage": "https://github.com/rsniz/blu-engie#readme",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0"
+  }
+}
