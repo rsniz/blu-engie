@@ -13,7 +13,8 @@ const token = process.env.DISCORD_TOKEN;
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMembers
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildPresences
 	]
 });
 
