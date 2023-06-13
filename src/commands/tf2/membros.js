@@ -43,7 +43,7 @@ function buildEmbed(title, roles) {
 		.setTitle(title)
 		.setDescription(description)
 		.setTimestamp()
-		.setFooter({ text: `Total: ${total}`});
+		.setFooter({ text: `Total: ${total}` });
 
 }
 

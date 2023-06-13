@@ -1,24 +1,41 @@
 const { Events } = require('discord.js');
 const { channelId, messages } = require('../config/welcome.json');
+const { ranks } = require('../config/roles.json');
 
 module.exports = {
 	name: Events.GuildMemberUpdate,
 	async execute(oldMember, newMember) {
-
-		// Check if member has passed the guild's membership gate.
-		if (oldMember.pending && !newMember.pending) {
-			// Send welcome message.
-			try {
+		try {
+			// Check if member has passed the guild's membership gate.
+			if (oldMember.pending && !newMember.pending) {
+				// Send welcome message.
 				const channel = await newMember.client.channels.fetch(channelId);
 
-				let	reply = messages[(Math.random() * messages.length) | 0];
-				reply = reply.replace('{USER}', newMember);
-				channel.send(reply);
+				const	reply = messages[(Math.random() * messages.length) | 0];
+				channel.send(reply.replace('{USER}', newMember));
 
 			}
-			catch (error) {
-				console.error(error);
+			// Check if roles have changed
+			else if (!oldMember.roles.cache.equals(newMember.roles.cache)) {
+				const rankIds = ranks.filter(r => r.index > 1).map(r => r.id);
+				const newRoles = newMember.roles.cache.subtract(oldMember.roles.cache);
+				const newRanks = newRoles.filter(r => rankIds.includes(r.id));
+
+				if (newRanks.size > 0) {
+					// Get the highest rank.
+					const newRank = newRanks.sort((rA, rB) => {
+						rB.rawPosition - rA.rawPosition;
+					}).first();
+
+					const channel = await newMember.client.channels.fetch(channelId);
+					const reply = `:tada:  ${newMember} acabou de subir para o rank ${newRank}  :tada:`;
+					channel.send(reply);
+				}
 			}
+		}
+		catch (error) {
+			console.error(error);
 		}
 	},
 };
+
