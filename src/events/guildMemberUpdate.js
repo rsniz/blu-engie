@@ -1,4 +1,4 @@
-const { Events } = require('discord.js');
+const { EmbedBuilder, Events } = require('discord.js');
 const { channelId, messages } = require('../config/welcome.json');
 const { ranks } = require('../config/roles.json');
 
@@ -11,7 +11,7 @@ module.exports = {
 				// Send welcome message.
 				const channel = await newMember.client.channels.fetch(channelId);
 
-				const	reply = messages[(Math.random() * messages.length) | 0];
+				const reply = messages[(Math.random() * messages.length) | 0];
 				channel.send(reply.replace('{USER}', newMember));
 
 			}
@@ -28,8 +28,12 @@ module.exports = {
 					}).first();
 
 					const channel = await newMember.client.channels.fetch(channelId);
-					const reply = `:tada:  ${newMember} acabou de subir para o rank ${newRank}  :tada:`;
-					channel.send(reply);
+					const embed = new EmbedBuilder()
+						.setColor(0x0cc90e)
+						.setDescription(`:tada:  ${newMember} acabou de subir para o rank ${newRank}  :tada:`)
+						.setTimestamp();
+
+					channel.send({ embeds: [embed] });
 				}
 			}
 		}
@@ -38,4 +42,3 @@ module.exports = {
 		}
 	},
 };
-
