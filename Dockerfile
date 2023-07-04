@@ -1,6 +1,8 @@
-FROM node:latest
+FROM node:18
 
-RUN mkdir -p /usr/src/bot
+RUN mkdir -p /usr/src/bot && chown -R node:node /usr/src/bot
+USER node
+
 WORKDIR /usr/src/bot
 
 COPY ./src/package.json /usr/src/bot

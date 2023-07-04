@@ -1,6 +1,14 @@
 // Load environment variables
 require('dotenv').config();
 
+// connecting to database
+const mongoose = require('mongoose');
+mongoose.connect(
+	process.env.MONGODB_URL,
+	{ useNewUrlParser: true, useUnifiedTopology: true },
+).then(console.log('Connected to Mongodb.'));
+
+
 // Require path classes
 const fs = require('node:fs');
 const path = require('node:path');
