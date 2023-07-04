@@ -6,7 +6,7 @@ const Schema = new mongo.Schema({
 });
 
 Schema.statics.findOrCreate = async function(id) {
-	const member = await this.findOneAndUpdate(
+	return await this.findOneAndUpdate(
 		{ id: id },
 		{
 			id: id,
@@ -16,7 +16,6 @@ Schema.statics.findOrCreate = async function(id) {
 			upsert: true,
 			new: true,
 		});
-	return member;
 };
 
 module.exports = mongo.model('Member', Schema);

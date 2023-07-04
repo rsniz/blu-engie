@@ -8,20 +8,28 @@ module.exports = {
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('classes')
-				.setDescription('Membros dos cargos de classe.'))
+				.setDescription('Membros dos cargos de classe.')
+				.addBooleanOption(option =>
+					option.setName('público')
+						.setDescription('Exibe a resposta para todos. Por padrão só você pode ver.')))
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('ranks')
-				.setDescription('Membros dos ranks de experiência.')),
+				.setDescription('Membros dos ranks de experiência.')
+				.addBooleanOption(option =>
+					option.setName('público')
+						.setDescription('Exibe a resposta para todos. Por padrão só você pode ver.'))),
 
 	async execute(interaction) {
+		const ephemeral = !interaction.options.getBoolean('público');
+
+		await interaction.deferReply({ ephemeral: ephemeral });
+
 		if (interaction.options.getSubcommand() === 'classes') {
-			await interaction.deferReply();
 			const roles = await fetchRoles(classes, interaction.guild);
 			await interaction.editReply({ embeds: [buildEmbed('Membros por Classe', roles)] });
 		}
 		else if (interaction.options.getSubcommand() === 'ranks') {
-			await interaction.deferReply();
 			const roles = await fetchRoles(ranks, interaction.guild);
 			await interaction.editReply({ embeds: [buildEmbed('Membros por Rank', roles)] });
 		}
@@ -30,7 +38,6 @@ module.exports = {
 
 function buildEmbed(title, roles) {
 	const total = roles.reduce((acc, r) => acc + r.members, 0);
-
 
 	let description = '';
 	roles.forEach(r => {
