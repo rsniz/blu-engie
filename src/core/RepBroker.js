@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const Member = require('../models/Member.js');
 const RepTransaction = require('../models/RepTransaction.js');
-
-// Interval for default award in minutes.
-const TIME_WINDOW = 1;
+const Setting = require('../models/Setting.js');
 
 /**
  * Manages transactions for the Reputation System.
@@ -68,7 +66,7 @@ class RepBroker {
 		if (latest) {
 
 			// Check for time window.
-			const timeWindow = getCurrentTimeWindow();
+			const timeWindow = await getCurrentTimeWindow();
 			if (latest.timestamp > timeWindow.start) {
 				const formatter = new Intl.DateTimeFormat(
 					'pt-BR',
@@ -139,12 +137,17 @@ class RepError extends Error {
  * Get start and end times of current
  * time window for default rep award.
  */
-function getCurrentTimeWindow() {
-	const now = new Date();
+async function getCurrentTimeWindow() {
+	// Get interval in minutes.
+	const interval = await Setting.findKey('rep_award_interval');
+	const minutes = interval ? interval.value : 60;
 
 	// Convert minutes to milliseconds.
-	const timeWindow = TIME_WINDOW * 60000;
+	const timeWindow = minutes * 60000;
 
+	console.log(timeWindow);
+
+	const now = new Date();
 	// Get today at midnight.
 	const midnight = new Date(
 		now.getFullYear(),
