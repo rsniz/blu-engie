@@ -6,16 +6,20 @@ const Schema = new mongo.Schema({
 });
 
 Schema.statics.findOrCreate = async function(id) {
-	return await this.findOneAndUpdate(
-		{ id: id },
-		{
-			id: id,
-			reputation: 0,
-		},
-		{
-			upsert: true,
-			new: true,
-		});
+	let member = await this.findOne({ id: id });
+	if (!member) {
+		member = await this.findOneAndUpdate(
+			{ id: id },
+			{
+				id: id,
+				reputation: 0,
+			},
+			{
+				upsert: true,
+				new: true,
+			});
+	}
+	return member;
 };
 
 module.exports = mongo.model('Member', Schema);

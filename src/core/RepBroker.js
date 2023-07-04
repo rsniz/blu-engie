@@ -3,7 +3,7 @@ const Member = require('../models/Member.js');
 const RepTransaction = require('../models/RepTransaction.js');
 
 // Interval for default award in minutes.
-const TIME_WINDOW = 60;
+const TIME_WINDOW = 1;
 
 /**
  * Manages transactions for the Reputation System.
@@ -28,7 +28,7 @@ class RepBroker {
 			const { giverId, recipientId, amount, reason, type } = data;
 			const recipient = await Member.findOrCreate(recipientId);
 
-			recipient.reputation += amount;
+			recipient.reputation += Number(amount);
 			recipient.save();
 
 			const log = new RepTransaction({
