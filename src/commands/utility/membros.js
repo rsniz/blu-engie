@@ -24,34 +24,22 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: ephemeral });
 
 		const category = interaction.options.getString('categoria');
-		switch (category) {
-		case 'classes': {
-			const { value: { classes } } = await Setting.findKey('roles');
-			const roles = await fetchRoles(classes, interaction.guild);
-			await interaction.editReply({ embeds: [buildEmbed('Membros por Classe', roles)] });
-			break;
-		}
-		case 'ranks':{
-			const { value: { ranks } } = await Setting.findKey('roles');
-			const roles = await fetchRoles(ranks, interaction.guild);
-			await interaction.editReply({ embeds: [buildEmbed('Membros por Rank', roles)] });
-			break;
-		}
-		case 'ping':{
-			const { value: { ping } } = await Setting.findKey('roles');
-			const roles = await fetchRoles(ping, interaction.guild);
-			await interaction.editReply({ embeds: [buildEmbed('Membros por Notificações', roles)] });
-			break;
-		}
-		case 'games':{
-			const { value: { games } } = await Setting.findKey('roles');
-			const roles = await fetchRoles(games, interaction.guild);
-			await interaction.editReply({ embeds: [buildEmbed('Membros por Jogos', roles)] });
-			break;
-		}
-		default:
+		const titles = {
+			classes: 'Membros por Classes',
+			ranks: 'Membros por Rank',
+			ping: 'Membros pro Notificações',
+			games: 'Memros por Jogos',
+		};
+
+		if (!Object.keys(titles).includes(category)) {
 			await interaction.editReply({ content: `Opção *${category}* não reconhecida.` });
+			return;
 		}
+
+		const { value: rolesList } = await Setting.findKey('roles');
+		const roles = await fetchRoles(rolesList[category], interaction.guild);
+		await interaction.editReply({ embeds: [buildEmbed(titles[category], roles)] });
+
 	},
 };
 
