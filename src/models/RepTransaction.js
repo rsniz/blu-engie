@@ -11,8 +11,8 @@ const Schema = new mongoose.Schema({
 	},
 	type: {
 		type: Number,
-		// 0 - Default; 1- Special;
-		enum: [0, 1],
+		// 0 - Default; 1- Extra; 2 - Bump
+		enum: [0, 1, 2],
 		default: 0,
 	},
 	amount: { type: Number, required: true },
