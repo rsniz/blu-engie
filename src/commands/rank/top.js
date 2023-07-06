@@ -17,7 +17,7 @@ module.exports = {
 		try {
 			const members = await Member.find({}).sort({ reputation: -1 });
 
-			const rank = await Promise.all(members.map(async member => {
+			let rank = await Promise.all(members.map(async member => {
 				const guildMember = await interaction.guild.members.fetch(member.id);
 				return {
 					guildMember: guildMember,
@@ -27,6 +27,7 @@ module.exports = {
 			}));
 
 			// TODO: Filter out members that have left the Discord guild.
+			rank = rank.filter(m => m.guildMember);
 
 			const scoreboard = new EmbedBuilder()
 				.setTitle('Classificação de Reputação')
@@ -34,13 +35,13 @@ module.exports = {
 				.setFooter({ text: `Total: ${rank.length}` })
 				.setTimestamp();
 
-			let desc = '';
+			let desc = '\n';
 
 			// TODO: Add pagination to scoreboard
 			const page1 = rank.slice(0, 24);
 
 			page1.forEach((m, i) => {
-				desc += `**#${i + 1}** ${m.guildMember}\nRep: ${m.reputation}\n`;
+				desc += `**#${i + 1}** ${m.guildMember}\nRep: ${m.reputation} (+${m.reputation * 50} exp)\n`;
 			});
 
 			scoreboard.setDescription(desc);

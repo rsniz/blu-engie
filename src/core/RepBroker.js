@@ -149,10 +149,8 @@ class RepError extends Error {
 async function getCurrentTimeWindow(minutes) {
 	// Convert minutes to milliseconds.
 	const timeWindow = minutes * 60000;
-
-	console.log(timeWindow);
-
 	const now = new Date();
+
 	// Get today at midnight.
 	const midnight = new Date(
 		now.getFullYear(),
