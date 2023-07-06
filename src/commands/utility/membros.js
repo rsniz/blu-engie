@@ -5,35 +5,52 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('membros')
 		.setDescription('Lista quantidade de membros em cargos.')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('classes')
-				.setDescription('Membros dos cargos de classe.')
-				.addBooleanOption(option =>
-					option.setName('público')
-						.setDescription('Exibe a resposta para todos. Por padrão só você pode ver.')))
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('ranks')
-				.setDescription('Membros dos ranks de experiência.')
-				.addBooleanOption(option =>
-					option.setName('público')
-						.setDescription('Exibe a resposta para todos. Por padrão só você pode ver.'))),
+		.addStringOption(option =>
+			option.setName('categoria')
+				.setDescription('Categoria de cargos.')
+				.setRequired(true)
+				.addChoices(
+					{ name: 'Classes', value: 'classes' },
+					{ name: 'Ranks', value: 'ranks' },
+					{ name: 'Notificação', value: 'ping' },
+					{ name: 'Jogos', value: 'games' },
+				))
+		.addBooleanOption(option =>
+			option.setName('público')
+				.setDescription('Exibe a resposta para todos os membros. Por padrão só você pode ver.')),
 
 	async execute(interaction) {
 		const ephemeral = !interaction.options.getBoolean('público');
-
 		await interaction.deferReply({ ephemeral: ephemeral });
 
-		if (interaction.options.getSubcommand() === 'classes') {
+		const category = interaction.options.getString('categoria');
+		switch (category) {
+		case 'classes': {
 			const { value: { classes } } = await Setting.findKey('roles');
 			const roles = await fetchRoles(classes, interaction.guild);
 			await interaction.editReply({ embeds: [buildEmbed('Membros por Classe', roles)] });
+			break;
 		}
-		else if (interaction.options.getSubcommand() === 'ranks') {
+		case 'ranks':{
 			const { value: { ranks } } = await Setting.findKey('roles');
 			const roles = await fetchRoles(ranks, interaction.guild);
 			await interaction.editReply({ embeds: [buildEmbed('Membros por Rank', roles)] });
+			break;
+		}
+		case 'ping':{
+			const { value: { ping } } = await Setting.findKey('roles');
+			const roles = await fetchRoles(ping, interaction.guild);
+			await interaction.editReply({ embeds: [buildEmbed('Membros por Notificações', roles)] });
+			break;
+		}
+		case 'games':{
+			const { value: { games } } = await Setting.findKey('roles');
+			const roles = await fetchRoles(games, interaction.guild);
+			await interaction.editReply({ embeds: [buildEmbed('Membros por Jogos', roles)] });
+			break;
+		}
+		default:
+			await interaction.editReply({ content: `Opção *${category}* não reconhecida.` });
 		}
 	},
 };

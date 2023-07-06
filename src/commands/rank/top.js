@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription('Exibe a classificação dos membros do servidor.')
 		.addBooleanOption(option =>
 			option.setName('público')
-				.setDescription('Exibe a resposta para todos. Por padrão só você pode ver.')),
+				.setDescription('Exibe a resposta para todos os membros. Por padrão só você pode ver.')),
 
 	async execute(interaction) {
 		const ephemeral = !interaction.options.getBoolean('público');
