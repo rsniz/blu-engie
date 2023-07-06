@@ -73,7 +73,7 @@ class RepBroker {
 		if (latest) {
 
 			// Check for time window.
-			const timeWindow = await getCurrentTimeWindow(interval);
+			const timeWindow = getCurrentTimeWindow(interval);
 			if (latest.timestamp > timeWindow.start) {
 				const formatter = new Intl.DateTimeFormat(
 					'pt-BR',
@@ -88,7 +88,7 @@ class RepBroker {
 					},
 				);
 				const nextTime = formatter.format(timeWindow.end);
-
+				console.log(nextTime);
 				throw new RepError(`Ainda não é possível dar reputação. Tente novamente após ${nextTime}.`);
 			}
 
@@ -146,18 +146,17 @@ class RepError extends Error {
  * @param {Number} interval - Time window length in minutes.
  * @return {Object} Time window.
  */
-async function getCurrentTimeWindow(minutes) {
+function getCurrentTimeWindow(minutes) {
 	// Convert minutes to milliseconds.
 	const timeWindow = minutes * 60000;
-	const now = new Date();
 
-	// Get today at midnight.
-	const midnight = new Date(
-		now.getFullYear(),
-		now.getMonth(),
-		now.getDate(),
-		0, 0, 0,
-	);
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = String(now.getMonth() + 1).padStart(2, '0');
+	const day = String(now.getDate()).padStart(2, '0');
+
+	// Get today at midnight with America/Sao_Paulo timezone.
+	const midnight = new Date(`${year}-${month}-${day}T00:00:00-03:00`);
 
 	const windowIndex = Math.floor(
 		(now.getTime() - midnight.getTime())
