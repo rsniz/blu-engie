@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { classes, ranks } = require('../../config/roles.json');
+const Setting = require('../../models/Setting.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,10 +26,12 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: ephemeral });
 
 		if (interaction.options.getSubcommand() === 'classes') {
+			const { value: { classes } } = await Setting.findKey('roles');
 			const roles = await fetchRoles(classes, interaction.guild);
 			await interaction.editReply({ embeds: [buildEmbed('Membros por Classe', roles)] });
 		}
 		else if (interaction.options.getSubcommand() === 'ranks') {
+			const { value: { ranks } } = await Setting.findKey('roles');
 			const roles = await fetchRoles(ranks, interaction.guild);
 			await interaction.editReply({ embeds: [buildEmbed('Membros por Rank', roles)] });
 		}

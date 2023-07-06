@@ -16,24 +16,12 @@ module.exports = {
 		try {
 			const target = interaction.options.getUser('membro');
 
-			// Check if recipient is bot.
-			if (target.bot) {
-				await interaction.editReply({
-					embeds: [
-						new EmbedBuilder()
-							.setDescription('Não é possível dar bônus de reputação para um bot.')
-							.setColor(0xF20D0D),
-					],
-					ephemeral: true,
-				});
-				return;
-			}
-
 			// TODO: Check if recipient has a "No Rep" role.
 
 			await RepBroker.defaultAward({
 				giverId: interaction.user.id,
 				recipientId: target.id,
+				isBot: target.bot,
 			});
 			await interaction.editReply({
 				embeds: [

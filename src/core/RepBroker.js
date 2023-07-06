@@ -55,18 +55,25 @@ class RepBroker {
 	 * @param {Number} data.giverId - Id of user that is giving rep.
 	 */
 	static async defaultAward(data) {
-		const { giverId, recipientId } = data;
+		const { giverId, recipientId, isBot } = data;
+		const awardSetting = await Setting.findKey('rep_award');
+		const { interval, award, kickback, allowBot } = awardSetting.value;
 
 		// Check for self award.
 		if (giverId === recipientId) {
 			throw new RepError('Não é possível dar bônus para a própria reputação.');
 		}
 
+		// Check for bot
+		if (!allowBot && isBot) {
+			throw new RepError('Não é possível dar bônus de reputação para um bot.');
+		}
+
 		const latest = await RepTransaction.latestDefault(giverId);
 		if (latest) {
 
 			// Check for time window.
-			const timeWindow = await getCurrentTimeWindow();
+			const timeWindow = await getCurrentTimeWindow(interval);
 			if (latest.timestamp > timeWindow.start) {
 				const formatter = new Intl.DateTimeFormat(
 					'pt-BR',
@@ -85,7 +92,7 @@ class RepBroker {
 				throw new RepError(`Ainda não é possível dar reputação. Tente novamente após ${nextTime}.`);
 			}
 
-			// Check for recipient.
+			// Check for latest recipient.
 			if (latest.recipientId === recipientId) {
 				throw new RepError('Não é possível dar bônus para o mesmo membro duas vezes seguidas.');
 			}
@@ -98,7 +105,7 @@ class RepBroker {
 			await RepBroker.giveRep({
 				giverId: giverId,
 				recipientId: recipientId,
-				amount: 5,
+				amount: award,
 				type: 0,
 				reason: 'Default Award',
 			});
@@ -106,7 +113,7 @@ class RepBroker {
 			await RepBroker.giveRep({
 				giverId: 0,
 				recipientId: giverId,
-				amount: 1,
+				amount: kickback,
 				type: 0,
 				reason: 'Default Award Kickback',
 			});
@@ -120,7 +127,6 @@ class RepBroker {
 		}
 		return;
 	}
-
 }
 
 /**
@@ -136,12 +142,11 @@ class RepError extends Error {
 /**
  * Get start and end times of current
  * time window for default rep award.
+ *
+ * @param {Number} interval - Time window length in minutes.
+ * @return {Object} Time window.
  */
-async function getCurrentTimeWindow() {
-	// Get interval in minutes.
-	const interval = await Setting.findKey('rep_award_interval');
-	const minutes = interval ? interval.value : 60;
-
+async function getCurrentTimeWindow(minutes) {
 	// Convert minutes to milliseconds.
 	const timeWindow = minutes * 60000;
 
