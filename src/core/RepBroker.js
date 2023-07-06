@@ -88,7 +88,6 @@ class RepBroker {
 					},
 				);
 				const nextTime = formatter.format(timeWindow.end);
-				console.log(nextTime);
 				throw new RepError(`Ainda não é possível dar reputação. Tente novamente após ${nextTime}.`);
 			}
 

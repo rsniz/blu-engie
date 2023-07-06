@@ -1,5 +1,6 @@
 const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require('discord.js');
 const { RepBroker, RepError } = require('../../core/RepBroker.js');
+const Setting = require('../../models/Setting.js');
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
@@ -11,11 +12,12 @@ module.exports = {
 
 		try {
 			const target = interaction.targetUser;
+			const user = interaction.user;
 
 			// TODO: Check if recipient has a "No Rep" role.
 
 			await RepBroker.defaultAward({
-				giverId: interaction.user.id,
+				giverId: user.id,
 				recipientId: target.id,
 				isBot: target.bot,
 			});
@@ -26,6 +28,18 @@ module.exports = {
 						.setColor(0x0CC90E),
 				],
 				ephemeral: true,
+			});
+
+			const { value: { repAward } } = await Setting.findKey('log_channels');
+			const logChannel = await interaction.guild.channels.fetch(repAward.id);
+
+			logChannel.send({
+				embeds: [
+					new EmbedBuilder()
+						.setDescription(`${user} deu reputação dado para ${target}!`)
+						.setColor(0x0CC90E)
+						.setTimestamp(),
+				],
 			});
 		}
 
