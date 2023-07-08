@@ -33,7 +33,10 @@ module.exports = {
 					const channel = await newMember.client.channels.fetch(defaultChannel);
 					const embed = new EmbedBuilder()
 						.setColor(0x0cc90e)
-						.setDescription(`:tada:  ${newMember} acabou de subir para o rank ${newRank}  :tada:`)
+						.setTitle('Atualização de Rank!')
+						.setThumbnail(newMember.displayAvatarURL())
+						.setDescription(`${newMember} acabou de subir para o rank ${newRank}!\n\n:tada: Parabéns :tada:`)
+						.setFooter({ text: `Membros neste Rank: ${newRank.members.size}` })
 						.setTimestamp();
 
 					channel.send({ embeds: [embed] });

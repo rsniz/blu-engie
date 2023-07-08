@@ -8,7 +8,7 @@ module.exports = {
 		.setDescription('Dá um bônus extraordinário de reputação para o membro escolhido.')
 		.addUserOption(option =>
 			option.setName('membro')
-				.setDescription('Membro para quem se deseja dar o bônus.')
+				.setDescription('Membro para quem se deseja dar o bônus de reputação.')
 				.setRequired(true))
 		.addNumberOption(option =>
 			option.setName('reputação')

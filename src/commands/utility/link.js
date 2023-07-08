@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription('Exibe links úteis da comunidade.')
 		.addStringOption(option =>
 			option.setName('link')
-				.setDescription('Link para exibir')
+				.setDescription('Link a ser exibido.')
 				.setRequired(true)
 				.addChoices(
 					{ name: 'Grupo da Steam', value: 'steamGroup' },

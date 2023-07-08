@@ -8,7 +8,7 @@ module.exports = {
 		.setDescription('Dá um bônus de reputação para o membro escolhido.')
 		.addUserOption(option =>
 			option.setName('membro')
-				.setDescription('Membro para quem se deseja dar o bônus.')
+				.setDescription('Membro que receberá o bônus de reputação.')
 				.setRequired(true)),
 
 	async execute(interaction) {
@@ -40,7 +40,7 @@ module.exports = {
 			logChannel.send({
 				embeds: [
 					new EmbedBuilder()
-						.setDescription(`${user} deu reputação dado para ${target}!`)
+						.setDescription(`${user} deu reputação para ${target}!`)
 						.setColor(0x0CC90E)
 						.setTimestamp(),
 				],
