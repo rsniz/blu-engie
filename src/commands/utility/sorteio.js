@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,7 +10,8 @@ module.exports = {
 				.setRequired(true))
 		.addStringOption(option =>
 			option.setName('descrição')
-				.setDescription('Descrição do sorteio.')),
+				.setDescription('Descrição do sorteio.'))
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
 	async execute(interaction) {
 		await interaction.deferReply();
