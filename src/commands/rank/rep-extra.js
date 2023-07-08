@@ -51,8 +51,8 @@ module.exports = {
 				.setColor(0x0CC90E)
 				.setTimestamp();
 
-			const { value: { repAward } } = await Setting.findKey('log_channels');
-			const logChannel = await interaction.guild.channels.fetch(repAward.id);
+			const { value: { reputation } } = await Setting.findKey('log_channels');
+			const logChannel = await interaction.guild.channels.fetch(reputation.id);
 
 			const { value: defaultChannel } = await Setting.findKey('default_channel');
 			const defChannel = await interaction.guild.channels.fetch(defaultChannel);

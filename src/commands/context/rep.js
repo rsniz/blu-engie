@@ -30,8 +30,8 @@ module.exports = {
 				ephemeral: true,
 			});
 
-			const { value: { repAward } } = await Setting.findKey('log_channels');
-			const logChannel = await interaction.guild.channels.fetch(repAward.id);
+			const { value: { reputation } } = await Setting.findKey('log_channels');
+			const logChannel = await interaction.guild.channels.fetch(reputation.id);
 
 			logChannel.send({
 				embeds: [

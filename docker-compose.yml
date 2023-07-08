@@ -4,8 +4,6 @@ services:
   bot:
     build: .
     image: blu-engie
-    volumes:
-      - ./src:/usr/src/bot
     environment:
      - MONGODB_URL=mongodb://mongodb:27017/blu-engie
     ports:
@@ -20,13 +18,9 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - blu-data:/data/db
+      - ./data:/data/db
     networks:
       - blu-network
-
-volumes:
-  blu-data:
-    external: true
 
 networks:
   blu-network:

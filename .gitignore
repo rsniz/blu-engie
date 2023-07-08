@@ -1,1 +1,4 @@
 /data
+
+*.yml
+!docker-compose.yml
