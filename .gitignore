@@ -1,4 +1,7 @@
-/data
+.data/
+.secrets/
 
 *.yml
 !docker-compose.yml
+
+.env

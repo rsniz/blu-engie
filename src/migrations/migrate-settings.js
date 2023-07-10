@@ -1,12 +1,16 @@
 // Creates basic Settings for database testing.
 
+const fs = require('node:fs');
 const mongoose = require('mongoose');
 const Setting = require ('../models/Setting.js');
+
+require('dotenv').config();
+const mongodbURL = fs.readFileSync(process.env.MONGODB_URL_FILE, 'utf-8').trim();
 
 async function migrate() {
 
 	await mongoose.connect(
-		process.env.MONGODB_URL,
+		mongodbURL,
 		{ useNewUrlParser: true, useUnifiedTopology: true },
 	);
 

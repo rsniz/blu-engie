@@ -1,21 +1,19 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const mongoose = require('mongoose');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
+
 // Load environment variables
 require('dotenv').config();
 
+const mongodbURL = fs.readFileSync(process.env.MONGODB_URL_FILE, 'utf-8').trim();
+const token = fs.readFileSync(process.env.DISCORD_TOKEN_FILE, 'utf-8').trim();
+
 // connecting to database
-const mongoose = require('mongoose');
 mongoose.connect(
-	process.env.MONGODB_URL,
+	mongodbURL,
 	{ useNewUrlParser: true, useUnifiedTopology: true },
 ).then(console.log('Connected to Mongodb.'));
-
-
-// Require path classes
-const fs = require('node:fs');
-const path = require('node:path');
-
-// Require the necessary discord.js classes
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const token = process.env.DISCORD_TOKEN;
 
 // Create a new client instance
 const client = new Client({
