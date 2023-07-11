@@ -25,6 +25,4 @@ Schema.statics.latestDefault = async function(id) {
 		.sort({ timestamp: -1 });
 };
 
-const RepTransaction = mongoose.model('RepTransaction', Schema);
-
-module.exports = RepTransaction;
+module.exports = mongoose.model('RepTransaction', Schema);

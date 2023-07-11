@@ -30,6 +30,10 @@ async function migrate() {
 				id: '',
 				webhook: '',
 			},
+			memberJoin: {
+				id: '',
+				webhook: '',
+			},
 		},
 	});
 
