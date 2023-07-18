@@ -57,6 +57,26 @@ async function migrate() {
 	});
 
 	await Setting.create({
+		key: 'servers',
+		value: {
+			cmb: {
+				name: 'Custom Maps - Brasil',
+				ips: [
+					{ index: 0, description: '', ip: '' },
+					{ index: 1, description: '', ip: '' },
+				],
+			},
+			uncletopiaSp: {
+				name: 'Uncletopia - São Paulo',
+				ips: [
+					{ index: 0, description: '', ip: '' },
+					{ index: 1, description: '', ip: '' },
+				],
+			},
+		},
+	});
+
+	await Setting.create({
 		key: 'roles',
 		value: {
 			classes: [
