@@ -19,7 +19,7 @@ module.exports = {
 			// Check if roles have changed
 			else if (!oldMember.roles.cache.equals(newMember.roles.cache)) {
 				const { value: { ranks } } = await Setting.findKey('roles');
-				const rankIds = ranks.filter(r => r.index > 1).map(r => r.id);
+				const rankIds = ranks.filter(r => r.index > 0).map(r => r.id);
 				const newRoles = newMember.roles.cache.subtract(oldMember.roles.cache);
 				const newRanks = newRoles.filter(r => rankIds.includes(r.id));
 
