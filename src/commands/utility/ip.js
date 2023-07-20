@@ -28,7 +28,7 @@ module.exports = {
 		const fields = server.ips.map(ip => {
 			return {
 				name: ip.description,
-				value: `\`\`connect ${ip.ip}\`\`\n[Conectar](https://tf2maniacos.com/connect.php?ip=${ip.ip})`,
+				value: `\`\`connect ${ip.ip}\`\`\n[Conectar](https://tf2maniacos.com.br/connect.php?ip=${ip.ip})`,
 			};
 		});
 
