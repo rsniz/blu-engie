@@ -6,11 +6,11 @@ module.exports = {
 		.setName('top')
 		.setDescription('Exibe a classificação dos membros do servidor.')
 		.addBooleanOption(option =>
-			option.setName('público')
-				.setDescription('Exibe a resposta para todos os membros. Por padrão só você pode ver.')),
+			option.setName('visível')
+				.setDescription('Exibe a resposta no chat. Por padrão só você pode ver.')),
 
 	async execute(interaction) {
-		const ephemeral = !interaction.options.getBoolean('público');
+		const ephemeral = !interaction.options.getBoolean('visível');
 
 		await interaction.deferReply({ ephemeral: ephemeral });
 
