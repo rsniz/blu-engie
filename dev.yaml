@@ -1,0 +1,56 @@
+# dev.yaml
+# --------------------------------------------------------------
+# These are development settings for docker compose.
+# Use this file to avoid rebuilding the image every
+# time code changes inside ./src.
+# --------------------------------------------------------------
+# docker compose -f dev.yaml -d
+
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    image: blu-engie
+    volumes:
+      - ./src/:/usr/src/bot
+    environment:
+      DISCORD_TOKEN_FILE: /run/secrets/discord_token
+      DISCORD_GUILD_ID_FILE: /run/secrets/discord_guild_id
+      DISCORD_APP_ID_FILE: /run/secrets/discord_app_id
+      MONGODB_URL_FILE: /run/secrets/mongodb_url
+    secrets:
+      - discord_token
+      - discord_app_id
+      - discord_guild_id
+      - mongodb_url
+    depends_on:
+      - mongodb
+    networks:
+      - blu-network
+
+  mongodb:
+    image: mongo:latest
+    command: --auth
+    volumes:
+      - blu-db:/data/db
+    networks:
+      - blu-network
+
+networks:
+  blu-network:
+    driver: bridge
+
+volumes:
+  blu-db:
+    external: true
+
+secrets:
+  discord_token:
+    file: .secrets/discord_token_secret
+  discord_app_id:
+    file: .secrets/discord_app_id_secret
+  discord_guild_id:
+    file: .secrets/discord_guild_id_secret
+  mongodb_url:
+    file: .secrets/mongodb_url_secret

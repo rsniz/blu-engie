@@ -2,6 +2,8 @@
 .secrets/
 
 *.yml
-!docker-compose.yml
+*.yaml
+!docker-compose.yaml
+!dev.yaml
 
 .env
