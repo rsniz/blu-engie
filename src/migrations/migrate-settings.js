@@ -95,6 +95,10 @@ async function migrate() {
 				{ index: 1, id: '', emoji: '' },
 				{ index: 2, id: '', emoji: '' },
 			],
+			vip: [
+				{ index: 1, id: '', emoji: '' },
+				{ index: 2, id: '', emoji: '' },
+			],
 		},
 	});
 
